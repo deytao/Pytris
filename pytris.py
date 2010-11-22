@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import curses
 
 SHAPE_TYPE_SQUARE = 101
@@ -41,11 +42,16 @@ class Bar(Shape):
 def draw_game_area(std):
     curses.noecho()
     curses.cbreak()
-    std.keypad(1)
 
-    std.addstr(12, 25, 'Here we go !')
+    std.keypad(1)
+    std.border(0)
+    std.addstr(1, 1, 'Welcome to Pytris')
+    std.addstr(2, 1, '             _  ')
+    std.addstr(3, 1, ' _          |_| ')
+    std.addstr(4, 1, '|_|    _ _  |_|  ___       _')
+    std.addstr(5, 1, '|_|_  |_|_| |_| |_|_|_   _|_|_')
+    std.addstr(6, 1, '|_|_| |_|_| |_|   |_|_| |_|_|_|')
     std.refresh()
-    std.getch()
 
 
 def close_game_area(std):
@@ -56,16 +62,23 @@ def close_game_area(std):
 
 
 def main():
-    print('Welcome in Pytris')
-    print('             _  ')
-    print(' _          |_| ')
-    print('|_|    _ _  |_|  ___       _')
-    print('|_|_  |_|_| |_| |_|_|_   _|_|_')
-    print('|_|_| |_|_| |_|   |_|_| |_|_|_|')
 
     stdscr = curses.initscr()
     
     draw_game_area(stdscr)
+
+    c = 0
+    while 1:
+        c = stdscr.getch() 
+        if c == ord('q'):
+            break
+        elif c == ord('g'):
+            stdscr.addstr(30, 30, 'Here we go !')
+            stdscr.refresh()
+        elif c == ord('j'):
+            stdscr.addstr(30, 30, 'Oh No !')
+            stdscr.refresh()
+
     close_game_area(stdscr)
 
 
