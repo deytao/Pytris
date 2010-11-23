@@ -74,12 +74,14 @@ def main():
 
         if c == ord('q'):
             break
-        elif c == ord('g'):
-            stdscr.addstr(30, 30, 'Here we go !')
-            stdscr.refresh()
-        elif c == ord('j'):
-            stdscr.addstr(30, 30, 'Oh No !')
-            stdscr.refresh()
+        elif c == ord('o'):
+            stdscr.addstr(30, 30, 'To the right !')
+        elif c == ord('p'):
+            stdscr.addstr(30, 30, 'To the left !')
+        elif c == ord('l'):
+            stdscr.addstr(30, 30, 'Faaaaaalling !')
+
+        stdscr.refresh()
 
     close_game_area(stdscr)
 
