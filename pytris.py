@@ -67,9 +67,11 @@ def main():
     
     draw_game_area(stdscr)
 
-    c = 0
-    while 1:
+    while True:
         c = stdscr.getch() 
+        stdscr.clear()
+        draw_game_area(stdscr)
+
         if c == ord('q'):
             break
         elif c == ord('g'):
