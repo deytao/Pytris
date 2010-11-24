@@ -54,7 +54,7 @@ shapes = []
 def main():
     gamescr = curses.initscr()
     gamescr.keypad(1)
-    gamescr.addstr(1, 1, 'Welcome to Pytris')
+    gamescr.addstr(1, 1, '')
     gamescr.addstr(2, 1, '             _  ')
     gamescr.addstr(3, 1, ' _          |_| ')
     gamescr.addstr(4, 1, '|_|    _ _  |_|  ___       _')
