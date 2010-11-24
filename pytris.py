@@ -39,50 +39,54 @@ class Bar(Shape):
         return self
 
 
-def draw_game_area(std):
+def draw_game_area(scr):
+    shapescr = scr.subwin(0, 50)
+    shapescr.border(0)
+    shapescr.refresh()
+
+    return shapescr
+
+
+#def close_game_area(std):
+
+
+shapes = []
+def main():
+    gamescr = curses.initscr()
+    gamescr.keypad(1)
+    gamescr.addstr(1, 1, 'Welcome to Pytris')
+    gamescr.addstr(2, 1, '             _  ')
+    gamescr.addstr(3, 1, ' _          |_| ')
+    gamescr.addstr(4, 1, '|_|    _ _  |_|  ___       _')
+    gamescr.addstr(5, 1, '|_|_  |_|_| |_| |_|_|_   _|_|_')
+    gamescr.addstr(6, 1, '|_|_| |_|_| |_|   |_|_| |_|_|_|')
+    gamescr.refresh()
+    gamescr.timeout(500)
+
     curses.noecho()
     curses.cbreak()
 
-    std.keypad(1)
-    std.border(0)
-    std.addstr(1, 1, 'Welcome to Pytris')
-    std.addstr(2, 1, '             _  ')
-    std.addstr(3, 1, ' _          |_| ')
-    std.addstr(4, 1, '|_|    _ _  |_|  ___       _')
-    std.addstr(5, 1, '|_|_  |_|_| |_| |_|_|_   _|_|_')
-    std.addstr(6, 1, '|_|_| |_|_| |_|   |_|_| |_|_|_|')
-    std.refresh()
-
-
-def close_game_area(std):
-    curses.nocbreak()
-    std.keypad(0)
-    curses.echo()
-    curses.endwin()
-
-
-def main():
-
-    stdscr = curses.initscr()
-    stdscr.timeout(500)
-
+    shapearea = draw_game_area(gamescr)
+    shapearea.timeout(500)
     while True:
-        c = stdscr.getch() 
-        stdscr.clear()
-        draw_game_area(stdscr)
+        c = shapearea.getch() 
+        shapearea.clear()
 
         if c == ord('q'):
             break
         elif c == ord('o'):
-            stdscr.addstr(30, 30, 'To the right !')
+            shapearea.addstr(30, 30, 'To the right !')
         elif c == ord('p'):
-            stdscr.addstr(30, 30, 'To the left !')
+            shapearea.addstr(30, 30, 'To the left !')
         elif c == ord('l'):
-            stdscr.addstr(30, 30, 'Faaaaaalling !')
+            shapearea.addstr(30, 30, 'Faaaaaalling !')
 
-        stdscr.refresh()
+        shapearea.refresh()
 
-    close_game_area(stdscr)
+    gamescr.keypad(0)
+    curses.nocbreak()
+    curses.echo()
+    curses.endwin()
 
 
 if __name__ == '__main__':
