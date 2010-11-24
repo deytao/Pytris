@@ -64,8 +64,7 @@ def close_game_area(std):
 def main():
 
     stdscr = curses.initscr()
-    
-    draw_game_area(stdscr)
+    stdscr.timeout(500)
 
     while True:
         c = stdscr.getch() 
