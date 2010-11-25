@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import curses
 
 SHAPE_TYPE_SQUARE = 101
@@ -38,21 +39,12 @@ class Bar(Shape):
         return self
 
 
-def draw_game_area(std):
-    curses.noecho()
-    curses.cbreak()
-    std.keypad(1)
+def create_game_area(scr):
+    shapescr = scr.subwin(100, 16, 0, 40)
+    return shapescr
 
-    std.addstr(12, 25, 'Here we go !')
-    std.refresh()
-    std.getch()
-
-
-def close_game_area(std):
-    curses.nocbreak()
-    std.keypad(0)
-    curses.echo()
-    curses.endwin()
+def draw_shapes(win, shapes):
+    return True
 
 
 def main():
