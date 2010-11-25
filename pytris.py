@@ -39,11 +39,8 @@ class Bar(Shape):
         return self
 
 
-def draw_game_area(scr):
-    shapescr = scr.subwin(0, 50)
-    shapescr.border(0)
-    shapescr.refresh()
-
+def create_game_area(scr):
+    shapescr = scr.subwin(100, 16, 0, 40)
     return shapescr
 
 
