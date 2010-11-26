@@ -1,60 +1,64 @@
 #!/usr/bin/env python
 
-import os
+from __future__ import with_statement
+
 import curses
 
-
-shapes = []
-
-
-def create_infosarea(area):
-    subwin = area.subwin(100, 40, 1, 1)
-    subwin.addstr(1, 1, 'Welcome to Pytris')
-    subwin.addstr(2, 1, '             _  ')
-    subwin.addstr(3, 1, ' _          |_| ')
-    subwin.addstr(4, 1, '|_|    _ _  |_|  ___       _')
-    subwin.addstr(5, 1, '|_|_  |_|_| |_| |_|_|_   _|_|_')
-    subwin.addstr(6, 1, '|_|_| |_|_| |_|   |_|_| |_|_|_|')
-    subwin.refresh()
-    return subwin
+from curses.wrapper import wrapper as run_cursed
 
 
-def create_shapesarea(area):
-    subwin = area.subwin(100, 16, 1, 40)
-    return subwin
+def print_lines(lines, window, minrow=1, mincol=1):
+    for i, line in enumerate(lines):
+        window.addstr(minrow + i, mincol, line)
+    window.refresh()
+
+
+class Controler(object):
+    
+    def __init__(self, game_window):
+        self.game_window = game_window
+        #self.current_shape = None
+
+    def right(self):
+        #XXX move current shape to left
+        print_lines(['To the rigth!'], self.game_window, 30, 10)
+
+    def left(self):
+        #XXX move current shape to left
+        print_lines(['To the left!'], self.game_window, 30, 10)
+
+    def down(self):
+        #XXX move current shape to left
+        print_lines(['Faaaaaalling!'], self.game_window, 30, 10)
+
+
+def run(main_window):
+    print_lines([
+        'Welcome to Pytris',
+        '',
+        ' _          |_| ',
+        '|_|    _ _  |_|  ___       _',
+        '|_|_  |_|_| |_| |_|_|_   _|_|_',
+        '|_|_| |_|_| |_|   |_|_| |_|_|_|',
+    ], main_window)
+    game_window = curses.newwin(50, 40, 1, 40)
+    game_window.border()
+    game_window.refresh()
+    controler = Controler(game_window)
+    action_map = {
+        'q': exit,
+        'o': controler.right,
+        'p': controler.left,
+        'l': controler.down,
+    }
+    while True:
+        keystroke = main_window.getch()  # blocking call
+        action = action_map[chr(keystroke)]
+        action()
 
 
 def main():
-    try:
-        mainarea = curses.initscr()
-        mainarea.keypad(1)
-        mainarea.refresh()
-        curses.noecho()
-        curses.cbreak()
-        infosarea = create_infosarea(mainarea)
-        shapesarea = create_shapesarea(mainarea)
-        shapesarea.timeout(500)
-        while True:
-            shapesarea.border(0)
-            shapesarea.refresh()
-            c = shapesarea.getch()
-            shapesarea.clear()
-            if c == ord('q'):
-                break
-            elif c == ord('o'):
-                shapesarea.addstr(30, 30, 'To the right !')
-            elif c == ord('p'):
-                shapesarea.addstr(30, 30, 'To the left !')
-            elif c == ord('l'):
-                shapesarea.addstr(30, 30, 'Faaaaaalling !')
-            shapesarea.refresh()
-    except Exception as inst:
-        raise
-    finally:
-        mainarea.keypad(0)
-        curses.nocbreak()
-        curses.echo()
-        curses.endwin()
+    run_cursed(run)
 
 
 if __name__ == '__main__':
