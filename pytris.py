@@ -4,53 +4,54 @@ import os
 import curses
 
 
-def create_game_area(scr):
-    shapescr = scr.subwin(100, 16, 0, 40)
-    return shapescr
-
-
-#def close_game_area(std):
-
-
 shapes = []
+
+
+def create_infosarea(area):
+    subwin = area.subwin(100, 40, 1, 1)
+    subwin.addstr(1, 1, 'Welcome to Pytris')
+    subwin.addstr(2, 1, '             _  ')
+    subwin.addstr(3, 1, ' _          |_| ')
+    subwin.addstr(4, 1, '|_|    _ _  |_|  ___       _')
+    subwin.addstr(5, 1, '|_|_  |_|_| |_| |_|_|_   _|_|_')
+    subwin.addstr(6, 1, '|_|_| |_|_| |_|   |_|_| |_|_|_|')
+    subwin.refresh()
+    return subwin
+
+
+def create_shapesarea(area):
+    subwin = area.subwin(100, 16, 1, 40)
+    return subwin
+
+
 def main():
     try:
-        gamearea = curses.initscr()
-        gamearea.keypad(1)
-        gamearea.addstr(1, 1, 'Welcome to Pytris')
-        gamearea.addstr(2, 1, '             _  ')
-        gamearea.addstr(3, 1, ' _          |_| ')
-        gamearea.addstr(4, 1, '|_|    _ _  |_|  ___       _')
-        gamearea.addstr(5, 1, '|_|_  |_|_| |_| |_|_|_   _|_|_')
-        gamearea.addstr(6, 1, '|_|_| |_|_| |_|   |_|_| |_|_|_|')
-        gamearea.refresh()
-
+        mainarea = curses.initscr()
+        mainarea.keypad(1)
+        mainarea.refresh()
         curses.noecho()
         curses.cbreak()
-
-        shapearea = create_game_area(gamearea)
-        shapearea.timeout(500)
+        infosarea = create_infosarea(mainarea)
+        shapesarea = create_shapesarea(mainarea)
+        shapesarea.timeout(500)
         while True:
-            shapearea.border(0)
-            shapearea.refresh()
-            c = shapearea.getch()
-            shapearea.clear()
-
+            shapesarea.border(0)
+            shapesarea.refresh()
+            c = shapesarea.getch()
+            shapesarea.clear()
             if c == ord('q'):
                 break
             elif c == ord('o'):
-                shapearea.addstr(30, 30, 'To the right !')
+                shapesarea.addstr(30, 30, 'To the right !')
             elif c == ord('p'):
-                shapearea.addstr(30, 30, 'To the left !')
+                shapesarea.addstr(30, 30, 'To the left !')
             elif c == ord('l'):
-                shapearea.addstr(30, 30, 'Faaaaaalling !')
-
-            shapearea.refresh()
-        break
-    except Exception:
-        pass
+                shapesarea.addstr(30, 30, 'Faaaaaalling !')
+            shapesarea.refresh()
+    except Exception as inst:
+        raise
     finally:
-        gamearea.keypad(0)
+        mainarea.keypad(0)
         curses.nocbreak()
         curses.echo()
         curses.endwin()
