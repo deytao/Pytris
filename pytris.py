@@ -53,8 +53,10 @@ def run(main_window):
     }
     while True:
         keystroke = main_window.getch()  # blocking call
-        action = action_map[chr(keystroke)]
-        action()
+        chrstroke = chr(keystroke)
+        if chrstroke in action_map:
+            action = action_map[chr(keystroke)]
+            action()
 
 
 def main():
