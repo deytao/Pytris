@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-from __future__ import with_statement
-
 import curses
 
-from curses.wrapper import wrapper as run_cursed
+from curses import wrapper as run_cursed
 
 
 def print_lines(lines, window, minrow=1, mincol=1):
