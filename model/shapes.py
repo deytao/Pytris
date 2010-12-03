@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 
 class Shape(object):
     column = 0

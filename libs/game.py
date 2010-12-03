@@ -1,8 +1,8 @@
-#!/usr/bin/env python
 
 import curses
 
 from curses import wrapper as run_cursed
+from model import shapes
 
 
 def print_lines(lines, window, minrow=1, mincol=1):
@@ -63,8 +63,4 @@ def run(main_window):
 
 def main():
     run_cursed(run)
-
-
-if __name__ == '__main__':
-    main()
 
