@@ -13,36 +13,38 @@ def print_lines(lines, window, minrow=1, mincol=1):
 
 class Controler(object):
     
-    def __init__(self, game_window):
-        self.game_window = game_window
+    def __init__(self, shapes_window):
+        self.shapes_window = shapes_window
         #self.current_shape = None
 
     def right(self):
         #XXX move current shape to left
-        print_lines(['To the rigth!'], self.game_window, 30, 10)
+        print_lines(['To the rigth!'], self.shapes_window, 30, 10)
 
     def left(self):
         #XXX move current shape to left
-        print_lines(['To the left!'], self.game_window, 30, 10)
+        print_lines(['To the left!'], self.shapes_window, 30, 10)
 
     def down(self):
         #XXX move current shape to left
-        print_lines(['Faaaaaalling!'], self.game_window, 30, 10)
+        print_lines(['Faaaaaalling!'], self.shapes_window, 30, 10)
 
 
 def run(main_window):
+    curses.curs_set(0)
+    game_window = main_window.subwin(50, 25, 0, 0)
     print_lines([
         'Welcome to Pytris',
-        '',
+        '             _',
         ' _          |_| ',
         '|_|    _ _  |_|  ___       _',
         '|_|_  |_|_| |_| |_|_|_   _|_|_',
         '|_|_| |_|_| |_|   |_|_| |_|_|_|',
-    ], main_window)
-    game_window = curses.newwin(50, 40, 1, 40)
-    game_window.border()
-    game_window.refresh()
-    controler = Controler(game_window)
+    ], game_window)
+    shapes_window = main_window.subwin(50, 32, 0, 26)
+    shapes_window.border()
+    shapes_window.refresh()
+    controler = Controler(shapes_window)
     action_map = {
         'q': exit,
         'o': controler.right,
@@ -50,10 +52,12 @@ def run(main_window):
         'l': controler.down,
     }
     while True:
-        keystroke = main_window.getch()  # blocking call
-        chrstroke = chr(keystroke)
-        if chrstroke in action_map:
+        keystroke = shapes_window.getch()  # blocking call
+        try:
             action = action_map[chr(keystroke)]
+        except KeyError:
+            pass
+        else:
             action()
 
 
