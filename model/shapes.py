@@ -8,5 +8,6 @@ class Shape(object):
         return self
 
     def move(self, moves):
-        self.column = self.column + moves.horizontal
-        self.column = self.column + moves.vertical
+        self.column += moves.horizontal
+        self.column += moves.vertical
+
