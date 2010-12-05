@@ -2,7 +2,7 @@
 import curses
 
 from curses import wrapper as run_cursed
-from model import shapes
+from model import shapes    # application's module
 
 
 def print_lines(lines, window, minrow=1, mincol=1):
