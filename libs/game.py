@@ -15,11 +15,13 @@ class Controler(object):
     
     def __init__(self, shapes_window):
         self.shapes_window = shapes_window
-        #self.current_shape = None
+        self.current_shape = shapes.I()
 
     def right(self):
         #XXX move current shape to left
-        print_lines(['To the rigth!'], self.shapes_window, 30, 10)
+        shape = self.current_shape
+        shape.move(3, 1)
+        print_lines(shape.states[0], self.shapes_window, shape.line, shape.column)
 
     def left(self):
         #XXX move current shape to left
