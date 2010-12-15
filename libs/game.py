@@ -8,7 +8,10 @@ from model import shapes    # application's module
 
 def print_lines(lines, window, minrow=1, mincol=1):
     for i, line in enumerate(lines):
-        window.addstr(minrow + i, mincol, line)
+        try:
+            window.addstr(minrow + i, mincol, line)
+        except Exception:
+            pass
     window.refresh()
 
 
@@ -20,7 +23,7 @@ class Controler(object):
     def right(self):
         #XXX move current shape to left
         shape = self.current_shape
-        shape.move(3, 1)
+        shape.move(3, 0)
         print_lines(shape.states[0], self.shapes_window, shape.line, shape.column)
 
     def left(self):
