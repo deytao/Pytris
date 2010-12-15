@@ -91,7 +91,7 @@ def run(main_window):
             pass
         else:
             action()
-        shapes_window.timeout(timeout)
+        shapes_window.timeout(int(timeout))
 
 
 def main():
