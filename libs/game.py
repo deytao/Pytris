@@ -3,7 +3,7 @@ import curses
 import random
 
 from curses import wrapper as run_cursed
-from model import shapes    # application's module
+from model import shapes  # application's module
 
 
 def print_lines(lines, window, minrow=1, mincol=1):
@@ -57,11 +57,6 @@ def run(main_window):
     game_window = main_window.subwin(50, 25, 0, 0)
     print_lines([
         'Welcome to Pytris',
-        '             _',
-        ' _          |_| ',
-        '|_|    _ _  |_|  ___       _',
-        '|_|_  |_|_| |_| |_|_|_   _|_|_',
-        '|_|_| |_|_| |_|   |_|_| |_|_|_|',
     ], game_window)
     shapes_window = main_window.subwin(50, 32, 0, 26)
     shapes_window.timeout(500)
