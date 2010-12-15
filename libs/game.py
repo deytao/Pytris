@@ -3,6 +3,7 @@ import curses
 import random
 
 from curses import wrapper as run_cursed
+from time import time
 from model import shapes  # application's module
 
 
@@ -45,6 +46,7 @@ class Controler(object):
         states.rotate(1)
 
 def run(main_window):
+    timeout = 500
     shapetypes = (
         shapes.I,
         shapes.J,
@@ -59,7 +61,6 @@ def run(main_window):
         'Welcome to Pytris',
     ], game_window)
     shapes_window = main_window.subwin(50, 32, 0, 26)
-    shapes_window.timeout(500)
     shapes_window.border(0)
     shapes_window.refresh()
     controler = Controler(shapes_window)
@@ -71,19 +72,26 @@ def run(main_window):
         'j': controler.down,
         'k': controler.rotate,
     }
+    shapes_window.timeout(timeout)
     while True:
+        start_time = time()
         keystroke = shapes_window.getch()  # blocking call, returning -1 after timeout delay
+        end_time = time()
+        wait_time = (end_time - start_time) * 1000
+        timeout -= wait_time
         shapes_window.clear()
         shapes_window.border(0)
         try:
             if keystroke == -1:
                 action = action_map['j']
+                timeout = 500
             else:
                 action = action_map[chr(keystroke)]
         except KeyError:
             pass
         else:
             action()
+        shapes_window.timeout(timeout)
 
 
 def main():
