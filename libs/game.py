@@ -82,11 +82,10 @@ def run(main_window):
         shapes_window.clear()
         shapes_window.border(0)
         try:
-            if keystroke == -1:
-                action = action_map['j']
-                timeout = 500
-            else:
-                action = action_map[chr(keystroke)]
+            action = action_map[chr(keystroke)]
+        except ValueError:
+            controler.down()
+            timeout = 500
         except KeyError:
             pass
         else:
