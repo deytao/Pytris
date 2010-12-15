@@ -35,6 +35,11 @@ class Controler(object):
         shape.move(0, 1)
         print_lines(shape.states[0], self.shapes_window, shape.line, shape.column)
 
+    def rotate(self):
+        #XXX move current shape to left
+        shape = self.current_shape
+        states = shape.states
+        states.rotate(1)
 
 def run(main_window):
     shapetypes = (

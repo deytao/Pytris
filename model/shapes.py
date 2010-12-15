@@ -1,4 +1,7 @@
 
+from collections import deque
+
+
 class Shape(object):
     column = 0
     line = 0
@@ -14,7 +17,7 @@ class Shape(object):
 class I(Shape):
     widht = 1
     height = 4
-    states = (
+    states = deque((
         [
             ' _ ',
             '|_|',
@@ -26,13 +29,13 @@ class I(Shape):
             ' _ _ _ _',
             '|_|_|_|_|',
         ],
-    )
+    ))
 
 
 class J(Shape):
     widht = 1
     height = 4
-    states = (
+    states = deque((
         [
             '   _ ',
             '  |_|',
@@ -55,13 +58,13 @@ class J(Shape):
             '|_|_|_|',
             '    |_|',
         ],
-    )
+    ))
 
 
 class L(Shape):
     widht = 1
     height = 4
-    states = (
+    states = deque((
         [
             ' _ ',
             '|_|',
@@ -84,13 +87,13 @@ class L(Shape):
             ' _ _|_|',
             '|_|_|_|',
         ],
-    )
+    ))
 
 
 class S(Shape):
     widht = 1
     height = 4
-    states = (
+    states = deque((
         [
             '   _ _',
             ' _|_|_|',
@@ -102,25 +105,25 @@ class S(Shape):
             '|_|_|',
             '  |_|',
         ],
-    )
+    ))
 
 
 class Square(Shape):
     widht = 1
     height = 4
-    states = (
+    states = deque((
         [
             ' _ _ ',
             '|_|_|',
             '|_|_|',
         ],
-    )
+    ))
 
 
 class T(Shape):
     widht = 1
     height = 4
-    states = (
+    states = deque((
         [
             '   _ ',
             ' _|_|_',
@@ -143,13 +146,13 @@ class T(Shape):
             '|_|_|',
             '  |_|',
         ],
-    )
+    ))
 
 
 class Z(Shape):
     widht = 1
     height = 4
-    states = (
+    states = deque((
         [
             ' _ _',
             '|_|_|_',
@@ -161,5 +164,5 @@ class Z(Shape):
             '|_|_|',
             '|_|',
         ],
-    )
+    ))
 
