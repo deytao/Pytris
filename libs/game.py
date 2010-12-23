@@ -30,7 +30,7 @@ class Controler(object):
         self.shapes_window = shapes_window
 
     def right(self):
-        #XXX move current shape to left
+        #XXX move current shape to right
         shape = self.current_shape
         shape.move(3, 0)
 
@@ -41,12 +41,12 @@ class Controler(object):
             shape.move(-3, 0)
 
     def down(self):
-        #XXX move current shape to left
+        #XXX move current shape to down
         shape = self.current_shape
         shape.move(0, 1)
 
     def rotate(self):
-        #XXX move current shape to left
+        #XXX rotate current shape spinning deque states
         shape = self.current_shape
         states = shape.states
         states.rotate(1)
