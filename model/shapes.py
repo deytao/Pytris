@@ -3,7 +3,7 @@ from collections import deque
 
 
 class Shape(object):
-    column = 0
+    column = 1
     line = 0
     states = ()
     width = 0

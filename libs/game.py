@@ -32,12 +32,14 @@ class Controler(object):
     def right(self):
         #XXX move current shape to right
         shape = self.current_shape
-        shape.move(3, 0)
+        cols = max(len(line) for line in shape.states[0])
+        if (shape.column + cols < 30):
+            shape.move(3, 0)
 
     def left(self):
         #XXX move current shape to left
         shape = self.current_shape
-        if (shape.column > 0):
+        if (shape.column > 3):
             shape.move(-3, 0)
 
     def down(self):
@@ -76,7 +78,7 @@ def run(main_window):
     print_lines([
         'Welcome to Pytris',
     ], game_window)
-    shapes_window = main_window.subwin(50, 32, 0, 26)
+    shapes_window = main_window.subwin(50, 33, 0, 26)
     shapes_window.border(0)
     shapes_window.refresh()
     controler = Controler(shapes_window)
