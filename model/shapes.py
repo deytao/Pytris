@@ -5,6 +5,7 @@ from collections import deque
 class Shape(object):
     column = 1
     line = 0
+    state = []
     states = ()
     width = 0
     height = 0

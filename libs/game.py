@@ -32,15 +32,15 @@ class Controler(object):
     def right(self):
         #XXX move current shape to right
         shape = self.current_shape
-        cols = max(len(line) for line in shape.states[0])
-        if (shape.column + cols < 30):
-            shape.move(3, 0)
+        cols = max(len(line) for line in shape.state)
+        if (shape.column + cols < 32):
+            shape.move(2, 0)
 
     def left(self):
         #XXX move current shape to left
         shape = self.current_shape
-        if (shape.column > 3):
-            shape.move(-3, 0)
+        if (shape.column > 1):
+            shape.move(-2, 0)
 
     def down(self):
         #XXX move current shape to down
@@ -50,24 +50,25 @@ class Controler(object):
     def rotate(self):
         #XXX rotate current shape spinning deque states
         shape = self.current_shape
-        states = shape.states
-        states.rotate(1)
+        shape.states.rotate(1)
+        shape.state = shape.states[0]
 
     def display(self, previous_ones):
         #XXX print current shape
         shape = self.current_shape
         previous_ones.append(shape)
         for i, displayed_shape in enumerate(previous_ones):
-            print_lines(displayed_shape.states[0], self.shapes_window, displayed_shape.line, displayed_shape.column)
+            print_lines(displayed_shape.state, self.shapes_window, displayed_shape.line, displayed_shape.column)
 
     def is_endoflines(self):
         window = self.shapes_window
         window_height, window_width = window.getmaxyx()
         shape = self.current_shape
-        return (shape.line + len(shape.states[0]) >= window_height - 1)
+        return (shape.line + len(shape.state) >= window_height - 1)
 
     def renew_shape(self):
         self.current_shape = random.choice(self.shape_types)()
+        self.current_shape.state = self.current_shape.states[0]
 
 
 def run(main_window):
