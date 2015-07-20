@@ -67,10 +67,14 @@ def run(main_window):
         keystroke = shapes_window.getch()  # blocking call
         try:
             action = action_map[chr(keystroke)]
-        except KeyError:
-            pass
-        else:
+        except (KeyError, ValueError):
+            continue
+        try:
+            shapes_window.clear()
+            shapes_window.border()
             action()
+        except curses.error:
+            pass
 
 
 def main():
