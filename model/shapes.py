@@ -1,165 +1,179 @@
+import random
 
 class Shape(object):
     column = 0
     line = 0
     states = ()
-    width = 0
-    height = 0
+    _state = 0
 
     def move(self, hspan, vspan):
         self.column += hspan
         self.line += vspan
 
+    @property
+    def state(self):
+        return self._state
+
+    @state.setter
+    def state(self, value):
+        try:
+            self.states[value]
+            self._state = value
+        except IndexError:
+            self._state = 0
+
+    @property
+    def current_state(self):
+        return self.states[self.state]
+
+    @property
+    def width(self):
+        return max([len(line) for line in self.current_state])
+
+    @property
+    def height(self):
+        return len(self.current_state)
+
+    @staticmethod
+    def get():
+        shape = random.choice([I, J, L, Z, Square])
+        return shape()
+
 
 class I(Shape):
-    widht = 1
-    height = 4
     states = (
-        [
+        (
             ' _ ',
             '|_|',
             '|_|',
             '|_|',
             '|_|',
-        ],
-        [
+        ),
+        (
             ' _ _ _ _',
             '|_|_|_|_|',
-        ],
+        ),
     )
 
 
 class J(Shape):
-    widht = 1
-    height = 4
     states = (
-        [
+        (
             '   _ ',
             '  |_|',
             ' _|_|',
             '|_|_|',
-        ],
-        [
+        ),
+        (
             ' _ ',
             '|_|_ _',
             '|_|_|_|',
-        ],
-        [
+        ),
+        (
             ' _ _',
             '|_|_|',
             '|_|',
             '|_|',
-        ],
-        [
+        ),
+        (
             ' _ _ _',
             '|_|_|_|',
             '    |_|',
-        ],
+        ),
     )
 
 
 class L(Shape):
-    widht = 1
-    height = 4
     states = (
-        [
+        (
             ' _ ',
             '|_|',
             '|_|_',
             '|_|_|',
-        ],
-        [
+        ),
+        (
             ' _ _ _',
             '|_|_|_|',
             '|_|',
-        ],
-        [
+        ),
+        (
             ' _ _ ',
             '|_|_|',
             '  |_|',
             '  |_|',
-        ],
-        [
+        ),
+        (
             '     _ ',
             ' _ _|_|',
             '|_|_|_|',
-        ],
+        ),
     )
 
 
 class S(Shape):
-    widht = 1
-    height = 4
     states = (
-        [
+        (
             '   _ _',
             ' _|_|_|',
             '|_|_|',
-        ],
-        [
+        ),
+        (
             ' _ ',
             '|_|_',
             '|_|_|',
             '  |_|',
-        ],
+        ),
     )
 
 
 class Square(Shape):
-    widht = 1
-    height = 4
     states = (
-        [
+        (
             ' _ _ ',
             '|_|_|',
             '|_|_|',
-        ],
+        ),
     )
 
 
 class T(Shape):
-    widht = 1
-    height = 4
     states = (
-        [
+        (
             '   _ ',
             ' _|_|_',
             '|_|_|_|',
-        ],
-        [
+        ),
+        (
             ' _ ',
             '|_|_',
             '|_|_|',
             '|_|',
-        ],
-        [
+        ),
+        (
             ' _ _ _',
             '|_|_|_|',
             '  |_|  ',
-        ],
-        [
+        ),
+        (
             '   _ ',
             ' _|_|',
             '|_|_|',
             '  |_|',
-        ],
+        ),
     )
 
 
 class Z(Shape):
-    widht = 1
-    height = 4
     states = (
-        [
+        (
             ' _ _',
             '|_|_|_',
             '  |_|_|',
-        ],
-        [
+        ),
+        (
             '   _ ',
             ' _|_|',
             '|_|_|',
             '|_|',
-        ],
+        ),
     )
-

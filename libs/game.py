@@ -1,4 +1,3 @@
-
 import curses
 
 from curses import wrapper as run_cursed
@@ -15,21 +14,31 @@ class Controler(object):
     
     def __init__(self, shapes_window):
         self.shapes_window = shapes_window
-        self.current_shape = shapes.I()
+        self.current_shape = shapes.Shape.get()
 
-    def right(self):
-        #XXX move current shape to left
+    def rotate(self):
+        """ rotate current shape clockwise """
         shape = self.current_shape
-        shape.move(3, 1)
-        print_lines(shape.states[0], self.shapes_window, shape.line, shape.column)
+        shape.state = shape.state + 1
+        print_lines(shape.current_state, self.shapes_window, shape.line, shape.column)
 
     def left(self):
-        #XXX move current shape to left
-        print_lines(['To the left!'], self.shapes_window, 30, 10)
+        """ move current shape to the left """
+        shape = self.current_shape
+        shape.move(-(shape.width), 1)
+        print_lines(shape.current_state, self.shapes_window, shape.line, shape.column)
 
     def down(self):
-        #XXX move current shape to left
-        print_lines(['Faaaaaalling!'], self.shapes_window, 30, 10)
+        """ move current shape to the bottom """
+        shape = self.current_shape
+        shape.move(0, 1)
+        print_lines(shape.current_state, self.shapes_window, shape.line, shape.column)
+
+    def right(self):
+        """ move current shape to the right """
+        shape = self.current_shape
+        shape.move(shape.width, 1)
+        print_lines(shape.current_state, self.shapes_window, shape.line, shape.column)
 
 
 def run(main_window):
@@ -49,9 +58,10 @@ def run(main_window):
     controler = Controler(shapes_window)
     action_map = {
         'q': exit,
-        'o': controler.right,
-        'p': controler.left,
-        'l': controler.down,
+        'w': controler.rotate,
+        'a': controler.left,
+        's': controler.down,
+        'd': controler.right,
     }
     while True:
         keystroke = shapes_window.getch()  # blocking call
@@ -65,4 +75,3 @@ def run(main_window):
 
 def main():
     run_cursed(run)
-
