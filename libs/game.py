@@ -15,33 +15,33 @@ def print_lines(lines, window, minrow=1, mincol=1):
 
 class Controler(object):
     
-    def __init__(self, shapes_window):
-        self.shapes_window = shapes_window
+    def __init__(self, window):
+        self.window = window
         self.current_shape = shapes.Shape.get()
 
     def rotate(self):
         """ rotate current shape clockwise """
         shape = self.current_shape
         shape.state = shape.state + 1
-        print_lines(shape.current_state, self.shapes_window, shape.line, shape.column)
+        print_lines(shape.current_state, self.window, shape.line, shape.column)
 
     def left(self):
         """ move current shape to the left """
         shape = self.current_shape
-        shape.move(-(shape.width), 1)
-        print_lines(shape.current_state, self.shapes_window, shape.line, shape.column)
+        shape.move(-1, 1)
+        print_lines(shape.current_state, self.window, shape.line, shape.column)
 
     def down(self):
         """ move current shape to the bottom """
         shape = self.current_shape
         shape.move(0, 1)
-        print_lines(shape.current_state, self.shapes_window, shape.line, shape.column)
+        print_lines(shape.current_state, self.window, shape.line, shape.column)
 
     def right(self):
         """ move current shape to the right """
         shape = self.current_shape
-        shape.move(shape.width, 1)
-        print_lines(shape.current_state, self.shapes_window, shape.line, shape.column)
+        shape.move(1, 1)
+        print_lines(shape.current_state, self.window, shape.line, shape.column)
 
 
 def run(main_window):
@@ -55,7 +55,7 @@ def run(main_window):
         '|_|_  |_|_| |_| |_|_|_   _|_|_',
         '|_|_| |_|_| |_|   |_|_| |_|_|_|',
     ], game_window)
-    shapes_window = main_window.subwin(50, 32, 0, 26)
+    shapes_window = main_window.subwin(50, 40, 0, 26)
     shapes_window.border()
     shapes_window.refresh()
     controler = Controler(shapes_window)
