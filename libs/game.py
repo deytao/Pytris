@@ -4,6 +4,9 @@ from curses import wrapper as run_cursed
 from model import shapes    # application's module
 
 
+SPEED = 500
+
+
 def print_lines(lines, window, minrow=1, mincol=1):
     for i, line in enumerate(lines):
         window.addstr(minrow + i, mincol, line)
@@ -63,8 +66,11 @@ def run(main_window):
         's': controler.down,
         'd': controler.right,
     }
+    shapes_window.timeout(SPEED)
     while True:
-        keystroke = shapes_window.getch()  # blocking call
+        keystroke = shapes_window.getch()
+        if keystroke == curses.ERR:
+            keystroke = ord('s')
         try:
             action = action_map[chr(keystroke)]
         except (KeyError, ValueError):
