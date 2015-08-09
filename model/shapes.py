@@ -1,14 +1,14 @@
 import random
 
 class Shape(object):
-    xcoord = 0
-    ycoord = 0
+    lng = 0
+    lat = 0
     states = ()
     _state = 0
 
     def move(self, hspan, vspan):
-        self.xcoord += hspan
-        self.ycoord += vspan
+        self.lng += hspan
+        self.lat += vspan
 
     @property
     def state(self):
@@ -27,12 +27,13 @@ class Shape(object):
         return self.states[self.state]
 
     @property
-    def width(self):
-        return max([len(line) for line in self.current_state])
-
-    @property
-    def height(self):
-        return len(self.current_state)
+    def matrix(self):
+        matrix = {}
+        for point, state in self.current_state.items():
+            lng, lat = point
+            new_point = (lng + self.lng, lat + self.lat)
+            matrix[new_point] = state
+        return matrix
 
     @staticmethod
     def get():

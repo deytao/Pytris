@@ -13,42 +13,50 @@ def print_lines(lines, window, minrow=1, mincol=1):
         window.addstr(minrow + i, mincol, line)
 
 
+class ShapeLanded(Exception):
+    pass
+
+
 class Playfield(object):
     """
         Shapes container
     """
 
-    def __init__(self, window, width, height, x=0, y=0):
-        self.window = window.subwin(height * 3, width * 3, y, x)
-        self.base_matrix = {(x, y): 0 for x in range(width) for y in range(height)}
-        self.shape = None
-        self.matrix = None
+    def __init__(self, window, width, height, lng=0, lat=0):
+        self.window = window.subwin(height, width, lat, lng)
+        self.base_matrix = {(lng, lat): 0 for lng in range(width) for lat in range(height)}
+        self.fixed_matrix = {(lng, lat): 1 for lng in range(width) for lat in range(height - 1, height)}
 
-    def set_shape(self, shape):
-        self.shape = shape
+    def intersects(self, shape):
+        if not shape:
+            return False
+        return set(self.fixed_matrix.keys()) & set(shape.matrix.keys())
 
-    def _merge(self):
-        self.matrix = copy(self.base_matrix)
-        if not self.shape:
-            return
-        for point, state in self.shape.current_state.items():
-            x, y = point
-            new_point = (x + self.shape.xcoord, y + self.shape.ycoord)
-            self.matrix[new_point] = state
+    def print_point(self, point):
+        lng, lat = point
+        lng = lng + (lng - 1)
+        self.window.addstr(lat - 1, lng, '_')
+        self.window.addstr(lat, lng - 1, '|')
+        self.window.addstr(lat, lng, '_')
+        self.window.addstr(lat, lng + 1, '|')
 
-    def print(self):
-        self._merge()
+    def print(self, shape=None):
+        matrix = copy(self.base_matrix)
+        if self.intersects(shape):
+            self.fixed_matrix.update(shape.matrix)
+            raise ShapeLanded()
+        else:
+            matrix.update(shape.matrix if shape else {})
+        matrix.update(self.fixed_matrix)
         self.window.clear()
         self.window.border()
-        for point, state in self.matrix.items():
+        for point, state in matrix.items():
             if not state:
                 continue
-            x, y = point
-            x = x + (x - 1)
-            self.window.addstr(y - 1, x, '_')
-            self.window.addstr(y, x - 1, '|')
-            self.window.addstr(y, x, '_')
-            self.window.addstr(y, x + 1, '|')
+            try:
+                self.print_point(point)
+            except curses.error:
+                continue
         self.window.refresh()
 
 
@@ -88,7 +96,7 @@ class Controler(object):
 
 def run(main_window):
     curses.curs_set(0)
-    side = Playfield(main_window, 17, 8)
+    side = Playfield(main_window, 50, 24)
     print_lines([
         'Welcome to Pytris',
         '             _',
@@ -98,7 +106,7 @@ def run(main_window):
         '|_|_| |_|_| |_|   |_|_| |_|_|_|',
         ], side.window)
     side.window.refresh()
-    playfield = Playfield(main_window, 17, 13, x=25)
+    playfield = Playfield(main_window, 50, 40, lng=25)
     playfield.print()
     controler = Controler(playfield.window)
     action_map = {
@@ -119,8 +127,9 @@ def run(main_window):
             continue
         try:
             shape = action()
-            playfield.set_shape(shape)
-            playfield.print()
+            playfield.print(shape)
+        except ShapeLanded:
+            controler.current_shape = shapes.Shape.get()
         except curses.error:
             pass
 
