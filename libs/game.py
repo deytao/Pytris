@@ -43,7 +43,8 @@ class Playfield(object):
         for point, state in self.matrix.items():
             if not state:
                 continue
-            x, y = (p + (p - 1) for p in point)
+            x, y = point
+            x = x + (x - 1)
             self.window.addstr(y - 1, x, '_')
             self.window.addstr(y, x - 1, '|')
             self.window.addstr(y, x, '_')
