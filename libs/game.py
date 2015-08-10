@@ -1,6 +1,6 @@
 import curses
 
-from copy import copy
+import copy
 from curses import wrapper as run_cursed
 from model import shapes    # application's module
 
@@ -25,38 +25,27 @@ class Playfield(object):
     def __init__(self, window, width, height, lng=0, lat=0):
         self.window = window.subwin(height, width, lat, lng)
         self.base_matrix = {(lng, lat): 0 for lng in range(width) for lat in range(height)}
-        self.fixed_matrix = {(lng, lat): 1 for lng in range(width) for lat in range(height - 1, height)}
+        self.fixed_matrix = {(lng, lat): '#' for lng in range(width) for lat in range(height - 1, height)}
 
     def intersects(self, shape):
         if not shape:
             return False
         return set(self.fixed_matrix.keys()) & set(shape.matrix.keys())
 
-    def print_point(self, point):
+    def print_point(self, point, char):
         lng, lat = point
-        lng = lng + (lng - 1)
-        self.window.addstr(lat - 1, lng, '_')
-        self.window.addstr(lat, lng - 1, '|')
-        self.window.addstr(lat, lng, '_')
-        self.window.addstr(lat, lng + 1, '|')
+        self.window.addstr(lat, lng, char)
 
-    def print(self, shape=None):
-        matrix = copy(self.base_matrix)
-        if self.intersects(shape):
-            self.fixed_matrix.update(shape.matrix)
-            raise ShapeLanded()
-        else:
-            matrix.update(shape.matrix if shape else {})
+    def print_(self, shape):
+        matrix = {}
         matrix.update(self.fixed_matrix)
+        matrix.update(shape.matrix)
         self.window.clear()
         self.window.border()
-        for point, state in matrix.items():
+        for point, state in sorted(matrix.items()):
             if not state:
                 continue
-            try:
-                self.print_point(point)
-            except curses.error:
-                continue
+            self.print_point(point, state)
         self.window.refresh()
 
 
@@ -67,30 +56,41 @@ class Controler(object):
 
     def __init__(self, window):
         self.window = window
-        self.current_shape = shapes.Shape.get()
 
-    def rotate(self):
+    def rotate(self, playfield, shape):
         """ rotate current shape clockwise """
-        shape = self.current_shape
+        duped = copy.deepcopy(shape)
         shape.state = shape.state + 1
+        if playfield.intersects(shape):
+            playfield.fixed_matrix.update({k: '%' for k in duped.matrix})
+            shape = shapes.Shape.get()
         return shape
 
-    def left(self):
+    def left(self, playfield, shape):
         """ move current shape to the left """
-        shape = self.current_shape
+        duped = copy.deepcopy(shape)
         shape.move(-1, 1)
+        if playfield.intersects(shape):
+            playfield.fixed_matrix.update({k: '%' for k in duped.matrix})
+            shape = shapes.Shape.get()
         return shape
 
-    def down(self):
+    def down(self, playfield, shape):
         """ move current shape to the bottom """
-        shape = self.current_shape
+        duped = copy.deepcopy(shape)
         shape.move(0, 1)
+        if playfield.intersects(shape):
+            playfield.fixed_matrix.update({k: '%' for k in duped.matrix})
+            shape = shapes.Shape.get()
         return shape
 
-    def right(self):
+    def right(self, playfield, shape):
         """ move current shape to the right """
-        shape = self.current_shape
+        duped = copy.deepcopy(shape)
         shape.move(1, 1)
+        if playfield.intersects(shape):
+            playfield.fixed_matrix.update({k: '%' for k in duped.matrix})
+            shape = shapes.Shape.get()
         return shape
 
 
@@ -106,11 +106,15 @@ def run(main_window):
         '|_|_| |_|_| |_|   |_|_| |_|_|_|',
         ], side.window)
     side.window.refresh()
+    shape = shapes.Shape.get()
     playfield = Playfield(main_window, 50, 40, lng=25)
-    playfield.print()
+    try:
+        playfield.print_(shape)
+    except curses.error:
+        pass
     controler = Controler(playfield.window)
     action_map = {
-        'q': exit,
+        'q': lambda pf, s: exit(0),
         'w': controler.rotate,
         'a': controler.left,
         's': controler.down,
@@ -126,10 +130,10 @@ def run(main_window):
         except (KeyError, ValueError):
             continue
         try:
-            shape = action()
-            playfield.print(shape)
+            shape = action(playfield, shape)
+            playfield.print_(shape)
         except ShapeLanded:
-            controler.current_shape = shapes.Shape.get()
+            shape = shapes.Shape.get()
         except curses.error:
             pass
 
